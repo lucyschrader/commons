@@ -48,8 +48,6 @@ def get_photo_info(i):
                     https://www.flickr.com/photos/nationallibrarynz_commons/%r
                     """ % int(i))
                 f.close()
-#    except:
-#        print "%r FAILED!" % request_url
         time.sleep(0.5)
 
 def build_flickr_request(photo_id):
