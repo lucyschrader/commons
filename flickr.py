@@ -46,8 +46,8 @@ def get_photo_numbers(username):
 
 def upload(dnz_id, IE_number):
     try:
-        photo_path = ('files/%s.jpg' % IE_number)
-#        photo_path = ('files/%s.tiff' % IE_number)
+#        photo_path = ('files/%s.jpg' % IE_number)
+        photo_path = ('files/%s.tif' % IE_number)
         metadata = get_metadata(dnz_id)
         title = metadata['title']
         description = add_citation(metadata['description'], dnz_id)
@@ -64,6 +64,7 @@ def upload(dnz_id, IE_number):
 
 def get_IE_number(dnz_id):
     api_url = 'http://api.digitalnz.org.nz/v3/records/%s.json?api_key=%s&fields=dc_identifier' % (str(dnz_id), dnz_api_key)
+    print api_url
     response = requests.get(api_url).json()
 #    print response['record']['dc_identifier']
     for i in response['record']['dc_identifier']:
@@ -103,13 +104,13 @@ def main():
         for dnz_id in f:
             IE_number = get_IE_number(dnz_id)
             if '%s.status' % IE_number in list_of_files:
-                print '%s.tiff already uploaded!' % IE_number
+                print '%s.tif already uploaded!' % IE_number
             else:
                 if i == no_of_uploads:
                     break
                 else:
-                    if '%s.jpg' % IE_number in list_of_files:
-#                    if '%s.tiff' % IE_number in list_of_files
+#                    if '%s.jpg' % IE_number in list_of_files:
+                    if '%s.tif' % IE_number in list_of_files:
                         if upload(dnz_id, IE_number) == True:
                             i += 1
                             if '%s.failure' % IE_number in list_of_files:
@@ -118,9 +119,9 @@ def main():
 def introduction():
     print """
 Welcome to the NATIONAL LIBRARY UPLOADING THINGS TO FLICKR interface.
-Before we get started, make sure all the tiffs you're uploading are
+Before we get started, make sure all the tifs you're uploading are
 sitting in the 'files' folder, and are named with their IE number and
-the 'tiff' extension, like so: 209763.tiff
+the 'tif' extension, like so: 209763.tif
 
 Make sure you've also got a file called 'dnz_numbers.txt', with the
 DigitalNZ identifier of each image you want to upload on a new line.
@@ -129,7 +130,7 @@ All good to go? Enter the number of images you want to upload, or leave
 it blank to top out at 50.
     """
     no_of_uploads = raw_input("> ")
-    if no_of_uploads == None:
+    if no_of_uploads == '':
         no_of_uploads = 50
     else:
         no_of_uploads = int(no_of_uploads)
